@@ -1,0 +1,204 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Amblypygid",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#comments"
+		},
+		{
+			"include": "#types"
+		},
+		{
+			"include": "#constants"
+		},
+		{
+			"include": "#modules"
+		},
+		{
+			"include": "#attributes"
+		},
+		{
+			"include": "#macros"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#numbers"
+		}
+	],
+	"repository": {
+		"types": {
+			"patterns": [
+				{
+					"name": "entity.name.type",
+					"match": "~?\\b[A-Z][A-Za-z0-9_]+\\b"
+				},
+				{
+					"name": "variable.parameter",
+					"match": "\\b[A-Z]\\b"
+				},
+				{
+					"name": "variable.parameter",
+					"match": "\\$\\b[A-Za-z][A-Za-z0-9_]*\\b"
+				},
+				{
+					"name": "entity.name.tag",
+					"match": "\\$\\b[0-9]+\\b"
+				},
+				{
+					"name": "entity.name.type",
+					"begin": "\\[",
+					"end": "\\]",
+					"patterns": [
+						{
+							"include": "#types"
+						},
+						{
+							"include": "#keywords"
+						},
+						{
+							"name": "entity.name.tag",
+							"match": "\\b[a-z_][A-Za-z0-9_]*\\b"
+						}
+					]
+				},
+				{
+					"name": "entity.name.type",
+					"begin": "[~$]\\(",
+					"end": "\\)",
+					"patterns": [
+						{
+							"include": "#types"
+						},
+						{
+							"include": "#keywords"
+						},
+						{
+							"name": "variable.parameter",
+							"match": "\\b[a-z_][A-Za-z0-9_]*\\b"
+						}
+					]
+				},
+				{
+					"name": "entity.name.type",
+					"begin": "[~$]\\{",
+					"end": "\\}",
+					"patterns": [
+						{
+							"include": "#types"
+						},
+						{
+							"include": "#keywords"
+						},
+						{
+							"name": "variable.parameter",
+							"match": "\\b[a-z_][A-Za-z0-9_]*\\b"
+						}
+					]
+				}
+			]
+		},
+		"comments": {
+			"patterns": [
+				{
+					"name": "comment.block",
+					"begin": "%\\*",
+					"end": "\\*%"
+				},
+				{
+					"name": "comment.line",
+					"begin": "%%",
+					"end": "$"
+				}
+			] 
+		},
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control",
+					"match": "\\b(with|pack|fn|type|pact|compl|ctor|dtor|named|is|where|dyn|exists|acq|cst|mut|vers|out|tag|if|else|while|for|in|match|case|do|as|return|this|Self|and|or|not|pub|priv|stc|sized|mobile|sendable|sharable|plain)\\b"
+				}
+			]
+		},
+		"constants": {
+			"patterns": [
+				{
+					"name": "constant.character.escape",
+					"match": "!\\b[a-z][A-Za-z0-9_]*\\b"
+				}
+			]
+		},
+		"modules": {
+			"patterns": [
+				{
+					"name": "markup.heading",
+					"match": "\\b[a-z][a-z0-9_]*\\b(?=::)"
+				}
+			]
+		},
+		"macros": {
+			"patterns": [{
+				"name": "meta.preprocessor",
+				"match": "#\\b\\w+"
+			}]
+		},
+		"attributes": {
+			"patterns": [
+				{
+					"name": "entity.other.attribute-name",
+					"begin": "%\\b[a-z]",
+					"end": "$",
+					"patterns": [
+						{
+							"include": "#strings"
+						},
+						{
+							"include": "#numbers"
+						}
+					]
+				},
+				{
+					"name": "entity.other.attribute-name",
+					"begin": "%\\[",
+					"end": "\\]",
+					"patterns": [
+						{
+							"include": "#strings"
+						},
+						{
+							"include": "#numbers"
+						}
+					]
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.amblypygid",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.amblypygid",
+					"match": "\\\\."
+				}
+			]
+		},
+		"numbers": {
+			"patterns": [
+				{
+					"name": "constant.numeric",
+					"match": "\\b[0-9][0-9_]*(\\.[0-9][0-9_]*)?\\b"
+				},
+				{
+					"name": "constant.numeric",
+					"match": "\\b0[xb][0-9A-F][0-9A-F_]*\\b"
+				}
+			]
+		}
+	},
+	"scopeName": "source.amblypygid"
+}

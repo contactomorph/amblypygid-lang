@@ -1,0 +1,32 @@
+{
+  "name": "amblypygid-lang",
+  "displayName": "Amblypygid Lang",
+  "description": "Syntax highlithing for amblypygid language",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [{
+      "id": "amblypygid",
+      "aliases": ["Amblypygid", "amblypygid"],
+      "extensions": [".ayy"],
+      "configuration": "./language-configuration.json"
+    }],
+    "configurationDefaults": {
+      "[amblypygid]": {
+        "editor.detectIndentation": false,
+        "editor.insertSpaces": false,
+        "editor.tabSize": 2
+      }
+    },
+    "grammars": [{
+      "language": "amblypygid",
+      "scopeName": "source.amblypygid",
+      "path": "./syntaxes/amblypygid.tmLanguage.json"
+    }]
+  }
+}
