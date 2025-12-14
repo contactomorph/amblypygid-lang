@@ -1,0 +1,29 @@
+
+%% Usual type
+type Foo
+  %% fields are private
+	n Int
+	text Text
+	id Guid
+	correct Bool
+
+%% Equivalent to:
+type Foo is { n Int; text Text; id Guid; correct Bool }
+
+%% Type aliases
+type DictOfStr[T] where T: Hashable = Dict[T, Str]
+
+%% Union type
+type Bar
+case A
+	n Int
+case B
+	text Text
+
+%% Equivalent to:
+type Bar case A is { n Int } case B is { text Text }
+
+%% Fields never have access modes. But views can be used to represent references.
+type Bazz[$a]
+	value View[$a, Text]
+	mutValue MutView[$a, Nat]

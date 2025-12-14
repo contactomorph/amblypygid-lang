@@ -1,0 +1,7 @@
+
+
+ok = 1 < a and (a < a_max or not array | empty())
+
+ok = 3 < a1 < a2 <= a3
+%% equivalent to
+ok = compare(3, a1) == Ordering!less and compare(a1, a2) == Ordering!less and compare(a2, a3) <> Ordering!greater

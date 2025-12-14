@@ -1,0 +1,16 @@
+
+
+type Wrapper: not mobile
+	client HttpClient
+	config View[this.client, HttpConfig]
+	ctor(acq client HttpClient)
+		this.client = client
+		this.config = client | getDefaultConfig
+
+fn createWrapper(acq client HttpClient, out wrapper Wrapper)
+	wrapper = Wrapper(client)
+
+fn main()
+	client HttpClient("/path")
+	box Box Wrapper = Box.fromClosure { out wrapper =>> createWrapper(client, out wrapper) }
+	

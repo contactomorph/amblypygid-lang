@@ -1,0 +1,50 @@
+
+%%% A random person
+%alignment normal
+pub type Person
+	name Text
+	birthDate UtcInstant
+	%%% Build a random person
+	%%% - name: name of the person
+	%%% - birthDate: birth date of the person
+	pub ctor(acq this.name, acq this.birthDate)
+
+pub pact Ageing
+	pub fn makeOlder(mut entity Self, period Period)
+
+%% Equivalent to:
+pub pact Ageing is { pub fn makeOlder(mut entity Self, period Period) }
+pub pact Ageing for Self is { pub fn makeOlder(mut entity Self, period Period) }
+
+compl Person: Ageing
+	pub fn makeOlder(mut entity Self, period Period)
+		entity.birthDate += period
+
+compl Person: Ordered
+	pub fn compare(first Self, second Self => Ordering)
+		ordering = compare(first.name, second.name)
+		if ordering == Ordering!equal
+			compare(first.birthDate, second.birthDate)
+		else
+			ordering
+
+%% Multi-argument pact
+pub pact Convertible for From and To
+	pub fn convert(cst source Self.From => Self.To)
+
+%% Multi-argument compliance
+compl Text named From and Nat named To: Convertible
+	pub fn convert(cst source Self.From => Self.To)
+		parseNat(source) | unwrapOr(0)
+
+%% Equivalent to:
+compl Text and Nat: Convertible
+	pub fn convert(cst source Self.From => Self.To)
+		parseNat(source) | unwrapOr(0)
+
+%% Join type and compliance declaration
+pub type Id
+	value N64
+	compl Displayable
+		pub fn toStr(cst id Self => Str)
+			id.value | toStr()

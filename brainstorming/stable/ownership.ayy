@@ -1,0 +1,23 @@
+
+
+fn f1(cst text Text => Bool) …
+%% equivalent to
+fn f1(text Text => Bool) …
+fn f2(mut text Text => Bool) …
+fn f3(acq text Text => Bool) …
+
+fn addFirst(mut list List[View[item, I]], vers item I) where vers in acq …
+
+%% rare but possible
+fn g(vers.1 a Str, vers.2 Str) …
+%% this is different from
+fn g(vers a Str, vers Str) …
+
+%% cases
+fn f(a Foo => Bar) … %% ok
+fn f(acq a Foo => Bar) … %% ok
+fn f(a Foo => View[a, Bar]) … %% ok
+fn f(acq a Foo => View[a, Bar]) … %% /!\ impossible
+fn f(a Foo, c View[a, Bazz] => Bar) … %% actually can encode variable dependent types
+fn f(acq a Foo, acq c View[a, Bazz] => Bar) … %% would be nice to have
+fn f( …  => $(b Bar, d View[b, Bazz])) … %% would be nice to have but makes output immobile

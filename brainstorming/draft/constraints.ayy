@@ -1,0 +1,40 @@
+
+sized %% opt-out
+mobile %% opt-out
+
+where T: sized?
+where T: mobile?
+where T: sendable
+where T: sharable
+where T: plain %% only trivial destructor recursively
+
+where T: RawFormatable + Hashable
+
+where T as exists U where U: Formattable in (>>>(U, Int)...)
+where F: {Text ==> Text}
+
+type PinedArea[T]: not mobile
+	…
+	ctor from(acq value: T) is { … }
+	ctor fromLambda(generator as ~{=>> T}) where T: mobile?
+		…
+
+compl PinedArea[T]: Indirection
+	type Item = T
+	fn toView(cst source Self => View[source, Item])
+		…
+
+compl PinedArea[T]: MutIndirection
+	type Item = T
+	fn toMutView(mut source Self => MutView[source, Item])
+		…
+
+type MaybeUninit[T]: not sendable
+	…
+	unsafe fn initializePart(mut self Self, subField SubField[T, S], acq value S)
+	unsafe fn declareInitialized(acq self Self => T)
+		…
+
+area = PinedArea[$(Nat32, Text)].fromLambda { ==>
+	(12, '"Hello")
+}

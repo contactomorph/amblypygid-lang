@@ -35,7 +35,7 @@
 			"patterns": [
 				{
 					"name": "entity.name.type",
-					"match": "~?\\b[A-Z][A-Za-z0-9_]+\\b"
+					"match": "\\b[A-Z][A-Za-z0-9_]+\\b"
 				},
 				{
 					"name": "variable.parameter",
@@ -43,11 +43,15 @@
 				},
 				{
 					"name": "variable.parameter",
-					"match": "\\$\\b[A-Za-z][A-Za-z0-9_]*\\b"
+					"match": "\\$\\b[A-Z][A-Za-z0-9_]*\\b"
+				},
+				{
+					"name": "variable.parameter",
+					"match": "\\$!\\b[a-z][A-Za-z0-9_]*\\b"
 				},
 				{
 					"name": "entity.name.tag",
-					"match": "\\$\\b[0-9]+\\b"
+					"match": "\\$\\b[a-z][A-Za-z0-9_]*\\b"
 				},
 				{
 					"name": "entity.name.type",
@@ -128,7 +132,7 @@
 			"patterns": [
 				{
 					"name": "constant.character.escape",
-					"match": "!\\b[a-z][A-Za-z0-9_]*\\b"
+					"match": "![A-Za-z0-9_]*"
 				}
 			]
 		},

@@ -1,0 +1,14 @@
+
+pact Functor for F type => type
+	fn map(vers input F[A], vers mapper Fn(input A => B) => F[B])
+
+pact Monad[type[type] $Monad]
+	fn unit(input $MA $A | output $M $Monad[$MA $A])
+	fn bind(input $MI $Monad[$MA $A], mapper fun($MA $A | $M $Monad[$MB $B]) | output $M $Monad[$MB $B])
+
+pact Applicative[type[type] $Applicative] where Functor[$Applicative]
+	fun unit(input $MA $A | output $M $Applicative[$MA $A])
+    fun may_map(mapper $Applicative[fun($A | $B)], input $Applicative[$A] | output $Applicative[$B])
+    
+pact CollectionBuilder[type[type] $CB]
+	…

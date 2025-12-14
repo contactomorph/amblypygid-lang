@@ -1,0 +1,58 @@
+
+%% 5 possible access modes
+acq	%% acquired ownership
+cst	%% shared constant borrow
+mut	%% single mutable borrow
+tag %% no data access, only identity
+out	%% out parameter (uninitialized memory location)
+
+%% Access modes are mandatory for both function parameters and local variables.
+fn swallow(acq t Text => Int) …
+fn write(mut t Text => Int) …
+fn read(cst t Text => Int) …
+fn pin(tag t Text => Int) …
+fn initialize(out t Text => Int) …
+
+%% Following casts are legal:
+acq acquired Foo = …
+mut mutable_borrow Foo = acquired
+cst constant_borrow Foo = mutable_borrow
+tag tagged_borrow Foo = constant_borrow
+out memory Foo = acquired2
+%% as well as all transitive combinations.
+
+%% Function returns never have an explicit access mode. They always return acquired ownership. 
+acq y = f(x)
+
+%% Any assignment to acq consumes the source.
+
+%% Any assignment to cst makes the source unmodifiable as long as the borrow exists.
+%% We say that the source is frozen while the borrow exists.
+
+%% Any assignment to mut makes the source unreachable as long as the borrow exists.
+%% We say that the source is jailed while the borrow exists.
+
+%% Any assignment to tag makes the source unmovable and undestroyable as long as the borrow exists.
+%% We say that the source is pinned while the borrow exists.
+
+%% Any assignment to out consumes the source and initializes the destination.
+%% Once done, the destination becomes an acquired ownership.
+
+%% Treating an expression with another access mode is possible using keyword «as»
+g(mutable_borrow as cst)
+
+%% Generic access mode is possible using keyword vers
+vers %% generic access mode
+%% Inside a function, vers represents the same access mode everywhere it is used.
+
+%% Access modes have default values.
+
+%% For function parameters, default is cst:
+fn f(x Foo) …
+%% is equivalent to
+fn f(cst x Foo) …
+
+%% For local variables, default is acq:
+acq x Foo = …
+%% is equivalent to
+Foo x = …

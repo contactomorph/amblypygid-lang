@@ -1,0 +1,45 @@
+
+type Opt[T]
+case Some
+	content T
+	ctor and dtor(this.content)
+case !none
+
+a = Opt[Int].Some(i)
+b = Opt[Int]!none
+
+%% type
+Opt[Int].Some
+%% value
+Opt[Int]!none
+
+%% option type
+Opt T
+T?
+%% result type
+Res[O, E]
+O / E
+
+%% union with common fields
+type Animal
+	name Str
+	i Int
+case Mammal %% impossible to construct as this is not terminal
+	content Array[Str]
+case Mammal.Cat
+	pub ctor(this.content, this.i, this.name)
+case Bird
+
+type Cardinal
+case !east, !west, !north, !south
+
+type Cardinal case !east, !west, !north, !south
+
+%% Free unions
+%% advantage: preexisting types
+%% weakness: non mutable 
+tuple $(integer Int or string Text or float Float32)
+
+%% Contrast with tuple:
+pair $(i Int, s Str)
+

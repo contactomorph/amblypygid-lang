@@ -1,0 +1,48 @@
+
+%% braces-free body (only for statements, not for expressions)
+if expr
+	statement1
+	statement2
+
+%% braced body
+%% "do" is mandatory
+%% possible for expressions
+if expr do {
+	statement1
+	statement2
+}
+
+%% one liner
+%% "do" is mandatory
+if expr do { statement1; …; statement2 }
+
+while i < j do { i += 3 }
+
+match j case 2 do { i += 3 } case _ do {}
+
+%% if and match can be expressions
+
+z = if n == 0 do 4 else if 5 == m do "Hello" else "world"
+x = match h case "nothing" do "self" case _ do "that"
+
+%% not tricky for compiler because "do" is part of lambda constructor
+if { x Int => … } == v
+	statement
+
+%% double braces are necessary for lambdas
+function = if condition do { { i Int => i + 3 } } else { { i Int => i * 7 } }
+
+%% declarations
+	
+type Foo
+	i Int
+	j F64
+
+type Foo is { i Int; j F64 }
+
+pact TextCollection
+	fn isEmpty(Text => Bool)
+	fn count(Text => Nat)
+	…
+
+pact TextCollection is { fn isEmpty(Text => Bool); fn count(Text => Nat); … }

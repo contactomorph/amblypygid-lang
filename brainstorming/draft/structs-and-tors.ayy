@@ -1,0 +1,68 @@
+
+%% no explicit constructor
+type Foo1
+	text Str
+	number Nat
+
+%% Difference between functions and constructors:
+%% - In functions, arguments are borrowed by default, in constructors, arguments are owned by default.
+%% - In functions, returned type must be specified, in constructors, returned type is the type being constructed.
+%% - In constructors, keyword "this" is used to refer to the object being constructed.
+%% - Constructors can be used to construct an "out" variable with fixed memory location. With functions, the returned value may be a temporary.
+
+%% implicit constructor
+%% arguments are owned by default
+%% arguments must be named
+foo1 = Foo1.(text = content, number = n)
+
+%% implicit destructor: get result and borrow x and m:
+cst (x = text, m = number) = getReference(…)
+cst Foo1.(x = text, m = number) = getReference(…)
+
+%% implicit destructor: destroy result and move x and m:
+acq (x = text, m = number) = getFreeObject( … )
+
+item = getFreeObject( … )
+cst (x1 = text, m1 = number) = item %% borrow x1 and m1
+acq (x2 = text, m2 = number) = item %% move x2 and m2
+
+%% basic constructors and named constructors
+type Foo2
+	text Str
+	number Nat
+	ctor and dtor(this.text, this.number)
+	ctor(this.text)
+		this.number = 4 %% litteral auto copy
+	ctor new(this.number)
+		this.text = "Hello"
+
+type Foo2(this.text, this.number)
+	text Str
+	number Nat
+	ctor(this.text)
+		this.number = 4 %% litteral auto copy
+	ctor new(this.number)
+		this.text = "Hello"
+
+%% arguments are owned by default
+fooA = Foo2(content, n)
+fooB = Foo2(content)
+fooC = Foo2.new(content)
+
+%% constructor equivalence
+
+%% declaration without construction
+z = … %% if owned and if type can be deduced
+acq z = … %% if type can be deduced
+acq z Dog = …
+
+%% nullary ctor
+Dog()
+
+z = Dog()
+acq z = Dog()
+
+Dog %% type only, never ctor
+
+%% reassignment
+z := Dog()

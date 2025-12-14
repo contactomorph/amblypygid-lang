@@ -1,0 +1,135 @@
+%% Declaration of variables of lambda type:
+acq unset ${ a Int, b Int => $(c Int, d Int) } = …
+acq other ${ a Int, b Int } = …
+fn unset2(Int, b Int => $(c Int, d Int)) …
+
+%% Pure lambda types are types where no information is captured from the surrounding context.
+%% They do not define closures, only anonymous functions.
+… = { a Int, b Int => … }
+
+%% Lambda types may be inferred from the definition:
+acq unset = { a Int, b Int => … }
+
+%% Function declaration must specify parameter and return types:
+fn unset2(a Int, b Int => $(c Int, d Int)) is { … }
+
+%% Call to lambda requires the use of «.(…)» syntax:
+c = { a Int, b Int => a + b }.(2, 3)
+c = unset.(a=2, b=3)
+
+%% Call to a function
+acq (c, d) = unset2(a, b)
+acq (c, d) = unset2(a=a, b=b)
+
+%% Standard function declaration: needs an additional indentation.
+fn factorial(x Nat => Nat) 
+	if x == 0 do 1 else x * factorial(x-1)
+
+%% Short function declaration: needs the «is» keyword followed by the body inside braces.
+fn factorial(x Nat => Nat) is { if x == 0 do 1 else x * factorial(x-1) } %% short-body-like
+
+acq factorial ${Nat => Nat} = { x do if x == 0 do 1 else x * factorial(x-1) }
+
+acq factorial ${Nat => Nat} = { x Nat => if x == 0 do 1 else x * factorial(x-1) }
+acq factorial ${Nat => Nat} = { x => if x == 0 do 1 else x * factorial(x-1) }
+
+%% Lambda types can declare named parameters.
+%% Those names can be used when calling the lambda.
+%% They do not need to match the names used in the lambda definition.
+acq factorial ${namedInput Nat => Nat} = {
+	x Nat =>
+	if x == 0 do 1 else x * factorial(x-1)
+}
+
+%owner "Me"
+fn getMotor(vers x Car => VersView[car, Motor]) is { … }
+%% forms:
+acq getMotor ${ vers car Car => VersView[car, Motor] } = { vers x Car => … }
+acq getMotor ${ vers car Car => VersView[car, Motor] } = { vers x => … }
+
+fn max(x Int, y Int => Int) is { … }
+fn max(x Nat, y Nat => Nat) is { … }
+
+compl I64: Maximizer
+	%inline
+	fn max(x I64, y I64 => I64) is { … }
+
+%% Universal call pattern:
+%% As functions can only be overloaded based on their number of parameters and not on their types,
+%% one only need to specify the number of parameters to disambiguate the function to call
+%% using the «\» symbol.
+cst myFunction = max\2
+
+%% If the function belongs to a compliance of a given type to a specific pact,
+%% one can specify the type and the pact to disambiguate the function to call
+%% using syntax «compl(〈Type〉: 〈Pact〉)».
+cst myFunction2 = compl(I64: Maximizer).max\2
+
+%% Lambda types can specify different kinds of closures:
+%% - does not modify state (freezing closures)
+acq v ${SomeA, SomeB in Float, Handler => Float} = { a, b in offset, handler => offset + diff(a, b, handler) }
+acq v ${SomeA, SomeB in Float, Handler => Float} = { a, b in offset Float, handler Handler => return offset + diff(a, b, handler) }
+%% - can modify state (jailing closures)
+acq v ${SomeA in Float, Handler ==> Float} = { a in offset, handler ==> offset + mutate(a, handler) }
+%% - can only be called once (transfering closures)
+acq v ${SomeA, SomeB in Float, Handler =>> Float} = { a, b in offset, handler =>> offset + yep(a, b, handler) }
+%% - has no closure (pure anonymous functions)
+acq v ${Float => Float} = { offset => offset * 2 }
+
+%% Captured data are specified using «in» keyword. Captured data is always acquired.
+%% If only borrowed access is needed, use views.
+%% Views can be assigned while capturing using the «〈view〉 = &〈source〉» or
+%% the «〈view〉 = ^〈source〉» syntax.
+acq v ${SomeA, View[b, SomeB] in Float, Handler =>> Float} = {
+	a, viewOnB = &b in offset, handler =>>
+	offset + yep(a, viewOnB, handler)
+}
+%% If no name is specified, the name of the view variable is the same as the source.
+acq v ${SomeA, View[b, SomeB] in Float, Handler =>> Float} = {
+	a, &b in offset, handler =>>
+	offset + yep(a, b, handler)
+}
+
+%% No params/no results closures are possible too:
+acq x ${Foo, Bar^ external_value in =>>} = { value, view = ^external_value in =>> consume(value, view) }
+
+%% Anonymous lambda types are types where captured information is not constrained.
+acq unset3 ~{a Int => Int} = …
+
+%% Anonymous lambda types may be inferred from the use.
+%% All three below are equivalent:
+fn higher1(f ~{Float, Handler => Float}) …
+fn higher1(f ${..C in Float, Handler => Float}) …
+fn higher1(f F) where F: {Float, Handler => Float} …
+%% Note that in F: {Float, Handler => Float}, the right-hand side is a constraint on
+%% the generic type parameter F but not a type itself.
+
+%% Note that below, parameter f and g may capture different information from the surrounding context.
+fn higher2(f ~{Float, Handler => Float}, g ~{Float, Handler => Float}) …
+%% This is different from the two following lines where parameter f and g must capture
+%% the same information from the surrounding context.
+fn higher3(f ${..C in Float, Handler => Float}, g ${..C in Float, Handler => Float}) …
+fn higher3(f F, g F) where F: {Float, Handler => Float} …
+
+%% However if a lambda type has a lifetime dependency, it must be specified explicitly.
+acq z ~{Float, Handler => Float} and source = …
+
+%% List of dynamically typed lambdas:
+acq list List[dyn {Float, Handler ==> Float}] = …
+
+acq a1 ${Text in =>> Int} = {r = text in =>> swallow(r) }
+acq a2 ${Text ^ text in =>> Int} = {r = ^text in =>> write(*r) }
+acq a2 ${Text & text in =>> Int} = {r = &text in =>> read(*r) }
+
+acq b1 ${Text in ==> Int} = {r = text in ==> write(r) } %% legal
+acq b2 ${Text ^ text in ==> Int} = {r = ^text in ==> write(*r) }
+
+acq c1 ${Text in => Int} = {r = text in read(r) } %% legal
+acq c3 ${Text & text in => Int} = {r = &text in read(*r) }
+
+%% Multiple captured variables:
+acq d ${Text, Arr[Int] & array in =>> Int} = {text, &array in =>> swallow(text) + array | len }
+%% Those two are equivalent:
+acq e ${Text, Arr[Int] ^ array in =>> Int} = {text, ^array in =>> swallow(text) + array | resizeToFitLength }
+acq d ~{=>> Int} and array = { =>> swallow(text) + array | resizeToFitLength }
+

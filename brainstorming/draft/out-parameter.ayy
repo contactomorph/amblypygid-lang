@@ -1,0 +1,49 @@
+
+%% Intrinsic pact for a type that can represent a memory location.
+pact Localizable
+	type Item
+	fn asLocation(acq self Self => Location[Self::Item])
+
+compl Location[I]: Localizable
+	type Item = I
+	fn asLocation(acq self Self => Location[Self::Item])
+		self
+
+%% Type Location[I] is an intrinsic type representing a memory location
+%% that can hold a value of type I. It can be converted to an out variable
+%% of type I using the operator *. This conversion moves the original
+%% Location[I] value, so the memory location can only be used once.
+
+%% Note that both pacts Localizable and Indirection represent a memory
+%% location and provide the operator *. The difference is that Localizable
+%% requires ownership of the location, while Indirection only requires
+%% a shared or mutable reference to the location.
+
+%% Location[I] provides a function free to free the memory location.
+%% The memory location must be owned to be freed. No destructor are called
+%% on the value stored in the location as it may be uninitialized.
+fn free(acq location Location[I]) { … }
+
+unsafe fn destroyAndFree(acq location Location[I]) { … }
+
+%% Memory location of x is passed to the function.
+%% x cannot be initialized before the call.
+%% Memory location of x is guaranteed to be initialized after the call.
+fn createFoo1(out x Foo)
+	x.text = "hello"
+	x.number = 42
+
+fn testCreateFoo1()
+	acq location Location[Foo] = allocateOnStack[Foo]()
+	%% Move location into out parameter using the operator *.
+	out foo Foo = *location
+	createFoo1(foo)
+	#assertEqual(foo.text, "hello")
+	#assertEqual(foo.number, 42)
+
+	acq location2 Location[Foo] = allocateOnStack[Foo]()
+	out foo2 Foo = *location2
+	%% Out parameter can also be initialized using an constructor with
+	%% guaranteed absence of temporary. The memory location used inside
+	%% the constructor is the same as the one used for the out parameter.
+	foo2 = Foo("world", 84)

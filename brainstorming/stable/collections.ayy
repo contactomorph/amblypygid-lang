@@ -1,0 +1,38 @@
+
+%% array with compile time size
+StaticArray[$!size, I]
+%% array with constant size / slice
+Arr[I]
+%% array with compile time capacity and dynamic size
+StaticList[$!capacity, I]
+%% array with constant capacity and dynamic size
+BoundedList[I]
+%% array with dynamic capacity and dynamic size
+List[I]
+%% linked list
+LinkedList[I]
+%% double ended queue
+Dequeue[I]
+%% hashtable based set
+Set[I]
+%% balanced tree based set
+OrderedSet[I]
+%% hashtable based dictionary
+Dict[K, V]
+%% balanced tree based dictionary
+OrderedDict[K, V]
+%% hashtable based multi-dictionary
+MultiDict[K, V]
+%% balanced tree based multi-dictionary
+OrderedMultiDict[K, V]
+
+%% pacts
+pact Sequence
+pact Iterable
+pact Collection
+pact List
+pact MutList
+pact Set
+pact MutSet
+pact Dict
+pact MutDict

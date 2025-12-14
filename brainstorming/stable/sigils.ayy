@@ -1,0 +1,100 @@
+%% ========================================
+%% CIRCUMFIXES
+%% ========================================
+
+%% One-line comment: «%% … 〈newline〉»
+%% This is a comment
+
+%% Muli-line comment: «%* … *%»
+%* This is a comment *%
+
+%% Documentation: «%%% … 〈newline〉»
+%%% Do the work
+
+%% One-line annotation: «% 〈ident〉 … 〈newline〉»
+%compile
+
+%% Nested annotation: «%[ … ]»
+%[owner "You"]
+
+%% Tuple type: «$( … )»
+$(Int, Int)
+
+%% Lambda type: «${ … }»
+${i Int => Int}
+
+%% Array literal: «![ … ]»
+![1, 2, 3]
+
+%% Dictionary literal: «!{ … }»
+!{ "one" = 1, "two" = 2 }
+
+%% Set literal: «!{ … }»
+!{ 1, 2, 3 }
+
+%% ========================================
+%% PREFIXES
+%% ========================================
+
+%% Constant: «!〈ident〉»
+!north
+
+%% Copy or project: «'»
+'zobi
+
+%% Macro: «#〈ident〉»
+#format("plop")
+
+%% Generic types: «$〈Ident〉»
+$Key
+
+%% Generic const: «$!〈ident〉»
+$!sim
+
+%% Generic life dependency: «$〈ident〉»
+$a
+
+%% Anonymous types: «~»
+~Formatable
+~{i Int => Int}
+~(..Int)
+
+%% Constant view: «&〈exp〉»
+&value
+
+%% Mutable view: «^〈exp〉»
+^value
+
+%% ========================================
+%% INFIXES
+%% ========================================
+
+%% Field access: «.»
+value.field
+
+%% Named constructor call: «.»
+Type.new
+
+%% Type constraint: «:»
+T: Formatable
+
+%% Contraint group: «and»
+T: Formatable and Comparable
+
+%% Generic type pack: «and»
+R and S and T: Formatable
+
+%% Module separation: «::»
+my_module::my_sub_module::MyType
+
+%% Function arity: «\»
+upsert\3
+
+%% Const view type: «&»
+Int & param
+
+%% Mutable view type: «^»
+Int ^ param
+
+%% Result type: «/»
+List[Int] / Error

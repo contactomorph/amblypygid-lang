@@ -1,0 +1,29 @@
+
+%% Generic parameters are typically defined using square brackets.
+%% However, if a generic type has only one generic parameter, the brackets can be omitted.
+
+maybe Opt[String] = !none
+maybe Opt String = !none
+
+complex List[Mutex[Dict[String, Set[Int]]]] = …
+complex List Mutex Dict[String, Set Int] = …
+
+complex = List[Mutex[Dict[String, Set[Int]]]]()
+complex = List Mutex Dict[String, Set Int]()
+
+%% Generic parameter must be declared in following order:
+%% - lifetime dependency parameters
+%% - constant value parameters
+%% - type parameters
+
+%% Lifetime dependency parameters start with «$» followed by an integer:
+type Buffer[$a]
+
+%% Constant value parameters start with «$» followed by a lowercase letter:
+type Array[$!size Int]
+
+%% Generic parameter types must either
+%% - start with «$» followed by an uppercase letter:
+type Wrapper[$Type]
+%% - be a single uppercase letter:
+type Box[T]

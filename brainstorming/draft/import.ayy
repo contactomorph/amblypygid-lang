@@ -1,0 +1,40 @@
+
+%*
+Imagine we have the following folder structure:
+.
+├── src
+│   ├── module_1
+│   │   └── submodule.ayy
+│   ├── module_2
+|   |   ├── .ayyp
+│   │   ├── submodule.ayy
+│   │   └── submodule_b.ayy
+│   ├── module_3
+|   |   ├── .ayyp
+│   │   └── submodule.ayy
+│   └── main.ayy
+.
+
+Then src/module_3/.ayyp can contain:
+
+%% siblings
+using module_1
+using module_2: m2
+
+*%
+
+with module2::submodule_a
+with pack::serialization::module3::submodule_b
+with pack::this::module3::submodule_b
+with super::submodule_b
+
+value1 module::submodule::Type1 = …
+
+%% Call to a function f defined in module::submodule
+module::submodule::f(value1, value2, value3)
+%% is equivalent to
+value1 | module::submodule::f(value2, value3)
+%% As f is friend to Type1 (the type of value1), it is also equivalent to
+value1 | f(value2, value3)
+%% However, this will fail in
+f(value1, value2, value3)

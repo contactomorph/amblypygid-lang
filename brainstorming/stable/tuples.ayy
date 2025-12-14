@@ -1,0 +1,26 @@
+(Int(), Float()) %% value
+(!int, !float) %% value
+$(Int, Float) %% type
+
+pair2 $(x Float, task AnonTask[Int]) = (-0.04, task = task)
+pair $(i Int, j Int) = (i = 3, j = 5)
+
+acq p = (-0.04, task = task)
+
+list List[$(i Int, j Int)]
+
+acq $(i, j) = pair
+
+acq r $() = ()
+
+fn d(list List[$(beg DateTime, id Guid)]) …
+fn d(list List $(beg DateTime, id Guid)) …
+
+acq r = ("plop", 1, !true)
+r.1 %% == 1
+r.0 %% == "plop"
+
+guid Guid(0x88484540, 0xAA110F22, 0xAA110F22, 0xAA110F22)
+
+%% anonymous tuple type
+~(Int...)

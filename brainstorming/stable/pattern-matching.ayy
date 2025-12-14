@@ -1,0 +1,13 @@
+
+cst (x, y, z, l) = getArray( … )
+
+%% obj else
+cst ( … ) = expr or else { break_statements }
+normal_statements
+
+%% equivalent to:
+match expr
+case ( … )
+	normal_statements
+case _
+	break_statements

@@ -1,0 +1,33 @@
+
+
+a = values | iter
+b = values | iter | cycle | skip(offset)
+c = a | zip(b) | map { cst (a, b) => b - a } | collect
+
+%% Equivalent to:
+a = iter(values)
+b = skip(cycle(iter(values)), offset)
+c = collect(map(zip(a, b), { cst (a, b) => b - a })
+
+%% Special syntax: no indentation needed when line starts with «|»
+a
+| zip(b)
+| map { cst (a, b) => b - a }
+| collect
+
+%% Chain as a core item of the language:
+fn fromTitle(acq title Text) | releaseDate(date DateOnly) | andDirector(acq name Text) | defineMovie(=> Movie)
+	Movie.(title, date = 'date, directorName = name)
+
+%% Equivalent to:
+fn fromTitle(acq title Text)
+| releaseDate(date DateOnly)
+| andDirector(acq name Text)
+| defineMovie(=> Movie)
+	Movie.(title, date = 'date, directorName = name)
+
+%% Chaining lambda:
+n = a | count_data | { m => m * 2 }
+
+%% Equivalent to:
+n = count_data(a) * 2

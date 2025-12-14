@@ -1,0 +1,19 @@
+
+%% Single line annotation
+%owner "You"
+x Int
+
+%% Inlined annotation
+%[owner "You"] y Int
+
+%can_fail
+fn f(%[owner "Can"] z Int)
+	…
+
+
+%ext "native"
+type Bool
+%ext "native"
+fn addressOf(object O => Address) …
+%ext "native"
+compile_time fn locate(object O => Location[O]) …

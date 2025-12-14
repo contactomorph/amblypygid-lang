@@ -1,0 +1,91 @@
+
+pact Indirection
+	type Item
+	fn toView(cst source Self => View[source, Item])
+
+compl View[_, I]: Indirection
+	type Item = I
+	fn toView(cst source Self => View[source, Item])
+		source | clone
+
+compl Rc[I]: Indirection
+	type Item = I
+	fn toView(cst source Self => View[source, Item])
+		source | getRef
+
+pact MutIndirection << Indirection
+	fn toMutView(mut source Self => View[source, Item])
+
+compl MutView[_, I]: MutIndirection
+	type Item = I
+	fn toView(mut source Self => View[source, Item])
+		source | clone
+
+compl MutCellRef[I]: MutIndirection
+	type Item = I
+	fn toView(mut source Self => View[source, Item])
+		source | getMutRef
+
+sharedText Rc[Text] = ...
+cst item Text = *sharedText
+cst sub Text = sharedText->[3, 8]
+
+
+type View[$a: cst or mut, I]
+	...
+
+acq view View[source, Text] = ...
+vers item Text = *view
+
+fn inspect(acq view View[$a, I])
+
+
+x Bool = a < 2 and isFound(item)
+
+fn at_or_fail(cst lst Lst[I], cst index Nat => View[lst, I])
+	cst pos Option[View[lst, I]] = lst | at(index)
+	match pos
+	case Some(ptr)
+		&ptr
+	case !none
+		#panic("Index does not exist")
+
+fn at_or_fail(lst Lst[I], index Nat => I*)
+	match lst | at(index)
+	case Some(ptr)
+		&ptr
+	case !none
+		#panic("Index does not exist")
+
+%% rfru
+
+%*
+Hello 
+*%
+
+%optim inline
+fn tweak(ptr View[I] => Bool)
+	vers item I = &ptr
+	isNull(item)
+
+	fct ${acq x Text, mut y Nat => Guid}
+	tuple $(item Element, zombie Zombie)
+	cst key $Key?
+
+
+!x = 434.3434
+!n = 34
+!text = "Hello"
+
+$(List[T], T, Int, Nat, Nat)
+
+get(plop) | to(pouet) | foreach(paf)
+
+fn get(plop) | to(pouet) | foreach(paf => Int)
+	...
+
+fct ${cst s Text, acq g Guid | acq x Text, mut y Nat => Guid}
+
+cst = 343
+
+to\0

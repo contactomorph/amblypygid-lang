@@ -1,0 +1,48 @@
+
+
+
+%% High precedence operators
+
+%% A
+(〈expr〉)
+
+%% B
+〈function〉(〈args〉)
+〈expr〉.〈field〉
+〈expr〉.(〈args〉)
+
+%% C
+〈expr〉 | 〈method〉
+
+%% D
+〈expr〉 * 〈expr〉
+〈expr〉 / 〈expr〉
+〈expr〉 // 〈expr〉
+
+%% E
++ 〈expr〉
+- 〈expr〉
+〈expr〉 + 〈expr〉
+〈expr〉 - 〈expr〉
+
+%% F
+〈expr〉 < 〈expr〉
+〈expr〉 <= 〈expr〉
+〈expr〉 > 〈expr〉
+〈expr〉 >= 〈expr〉
+
+%% E
+〈expr〉 == 〈expr〉
+〈expr〉 <> 〈expr〉
+
+%% F
+not 〈expr〉
+
+%% G
+〈expr〉 and 〈expr〉
+
+%% H
+〈expr〉 or 〈expr〉
+
+%% I
+〈expr〉, 〈expr〉

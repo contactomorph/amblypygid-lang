@@ -1,0 +1,6 @@
+
+
+text Str = #format("{}, {}", a, b)
+#assert_eq(3, 4)
+#assert_neq(3, 4)
+#fail("Failed")

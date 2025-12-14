@@ -1,0 +1,87 @@
+
+%% Views are actual types that provide borrowed access to data
+%% while depending on the lifetime of the source data.
+%% Contrary to access modes, views can be returned from functions
+%% and stored in data structures.
+
+acq source Source = …
+
+%% The basic view type is «View[source, Item]»
+%% It provides constant borrowed access to the item.
+%% The source type parameter is used to track the lifetime dependency.
+acq view View[source, Item] = View[source, Item](source)
+%% Equivalent to:
+acq view Item & source = &source
+
+%% The mutable view type is «MutView[source, Item]»
+%% It provides mutable borrowed access to the item.
+%% The source type parameter is used to track the lifetime dependency.
+acq mview MutView[source, Item] = MutView[source, Item](source)
+%% Equivalent to:
+acq mview Item ^ source = ^source
+
+%% The versatile view type is «VersView[source, Item]»
+%% It can provide either constant or mutable borrowed access to the item
+%% depending on the access mode of the source.
+type VersView[$a, Item] where cst or mut $a = stc if cst $a do View[$a, Item] else MutView[$a, Item]
+acq vview VersView[value, Item] = VersView[value, Item](value)
+vers item Item = *vview
+
+%% All views have a special built-in dereference operator «*»
+%% that provides access to the item being viewed but only
+%% with the access mode allowed by the view.
+
+cst item Item = *view
+mut item Item = *mview
+vers item Item = *vview
+
+%% Indirection is a pact that allows converting a type
+%% to a view of its item type.
+%% When a type complies to the Indirection pact,
+%% the operator «*' can be used to automatically invoke function 'toView»
+%% and get access to the item with cst access mode.
+pact Indirection
+	type Item
+	fn toView(cst source Self => View[source, Item])
+
+compl View[_, Item]: Indirection
+	type Item = Item
+	fn toView(cst source Self => View[source, Item])
+		'source
+
+compl Rc[Item]: Indirection
+	type Item = Item
+	fn toView(cst source Self => View[source, Item])
+		source | getView
+
+%% Mutable indirection is a pact that allows converting a type
+%% to a mutable view of its item type.
+%% When a type complies to the MutIndirection pact,
+%% the operator «*' can be used to automatically invoke function 'toMutView»
+%% and get access to the item with mut access mode.
+pact MutIndirection where Self: Indirection
+	fn toMutView(mut source Self => MutView[source, Item])
+
+compl MutView[_, Item]: MutIndirection
+	type Item = Item
+	fn toView(mut source Self => MutView[source, Item])
+		'source
+
+compl MutCellRef[Item]: MutIndirection
+	type Item = Item
+	fn toView(mut source Self => MutView[source, Item])
+		source | getMutView
+
+%% Examples:
+sharedText Rc[Text] = …
+cst item Text = *sharedText
+%% Equivalent to:
+cst item Text = *toView(sharedText)
+cst item Text = sharedText | getView | *
+
+heapText Box[Text] = …
+mut item Text = *heapText
+%% Equivalent to:
+mut item Text = *toMutView(heapText)
+mut item Text = heapText | getMutView | *
+

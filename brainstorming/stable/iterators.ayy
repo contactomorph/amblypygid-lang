@@ -1,0 +1,20 @@
+pub pact Enumerator
+	type Elt
+	fn toNext(mut it Self => Opt[View[it, Elt]])
+	%% fn toNext(mut it Self => Opt[Elt & it])
+	
+pub pact DoubleEnumerator where Enumerator
+	fn toPrevious(mut it Self => Opt[View[it, Elt]])
+
+pub pact Iterator where Enumerator
+	fn toNextHandle(it mut Self => Opt[IterationHandle[it, Elt]])
+
+pub pact Sequence
+	type Elt
+	type Enum: Enumerator named E where E.Elt == Elt
+	fn getEnumerator(cst enumerable Self => Enum and enumerable)
+	
+pub pact Collection where Sequence
+	fn getSize(cst collection Self => count Nat)
+
+
