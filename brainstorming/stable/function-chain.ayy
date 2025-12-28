@@ -15,7 +15,7 @@ a
 | map { cst (a, b) => b - a }
 | collect
 
-%% Chain as a core item of the language:
+%% Idea: Chain as a core item of the language:
 fn fromTitle(acq title Text) | releaseDate(date DateOnly) | andDirector(acq name Text) | defineMovie(=> Movie)
 	Movie.(title, date = 'date, directorName = name)
 

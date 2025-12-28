@@ -98,3 +98,6 @@ Int ^ param
 
 %% Result type: «/»
 List[Int] / Error
+
+%% Reinterpret cast: «as»
+value as Int

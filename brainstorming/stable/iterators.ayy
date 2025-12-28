@@ -1,18 +1,18 @@
 pub pact Enumerator
 	type Elt
-	fn toNext(mut it Self => Opt[View[it, Elt]])
-	%% fn toNext(mut it Self => Opt[Elt & it])
+	fn toNext(mut it Self => Opt[View[it, Self.Elt]])
 	
 pub pact DoubleEnumerator where Enumerator
-	fn toPrevious(mut it Self => Opt[View[it, Elt]])
+	fn toPrevious(mut it Self => Opt[View[it, Self.Elt]])
 
 pub pact Iterator where Enumerator
-	fn toNextHandle(it mut Self => Opt[IterationHandle[it, Elt]])
+	type Handle[a] named E where E: IterationHandle and a where E.Elt == Self.Elt
+	fn toNextHandle(it mut Self => Opt[Self.Handle[it]])
 
 pub pact Sequence
 	type Elt
-	type Enum: Enumerator named E where E.Elt == Elt
-	fn getEnumerator(cst enumerable Self => Enum and enumerable)
+	type Enum[a] named E where E: Enumerator and a where E.Elt == Self.Elt
+	fn getEnumerator(cst enumerable Self => Self.Enum[enumerable])
 	
 pub pact Collection where Sequence
 	fn getSize(cst collection Self => count Nat)

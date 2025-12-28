@@ -1,4 +1,7 @@
 
+%% Type names must be start with a capital letter and be at least 2 letters long.
+%% Single capital letters are reserved for generic type parameters.
+
 %% Usual type
 type Foo
   %% fields are private
@@ -24,6 +27,6 @@ case B
 type Bar case A is { n Int } case B is { text Text }
 
 %% Fields never have access modes. But views can be used to represent references.
-type Bazz[$a]
-	value View[$a, Text]
-	mutValue MutView[$a, Nat]
+type Bazz[a]
+	value View[a, Text]
+	mutValue MutView[a, Nat]

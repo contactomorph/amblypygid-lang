@@ -1,7 +1,7 @@
 let files = ls ./brainstorming/stable/*.ayy;
 let output = "./brainstorming/all.ayy";
 
-"%%%% Examples \n\n" | save -f $output;
+"%%%% Manual \n\n" | save -f $output;
 
 for f in $files {
     "%% -----------------------\n" | save --append $output;

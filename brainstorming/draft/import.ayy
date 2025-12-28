@@ -32,7 +32,7 @@ value1 module::submodule::Type1 = …
 
 %% Call to a function f defined in module::submodule
 module::submodule::f(value1, value2, value3)
-%% is equivalent to
+%% Equivalent to:
 value1 | module::submodule::f(value2, value3)
 %% As f is friend to Type1 (the type of value1), it is also equivalent to
 value1 | f(value2, value3)

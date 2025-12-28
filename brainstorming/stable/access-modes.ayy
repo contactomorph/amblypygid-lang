@@ -33,7 +33,7 @@ acq y = f(x)
 %% We say that the source is jailed while the borrow exists.
 
 %% Any assignment to tag makes the source unmovable and undestroyable as long as the borrow exists.
-%% We say that the source is pinned while the borrow exists.
+%% We say that the source is monitored while the borrow exists.
 
 %% Any assignment to out consumes the source and initializes the destination.
 %% Once done, the destination becomes an acquired ownership.
@@ -49,10 +49,10 @@ vers %% generic access mode
 
 %% For function parameters, default is cst:
 fn f(x Foo) …
-%% is equivalent to
+%% Equivalent to:
 fn f(cst x Foo) …
 
 %% For local variables, default is acq:
 acq x Foo = …
-%% is equivalent to
+%% Equivalent to:
 Foo x = …

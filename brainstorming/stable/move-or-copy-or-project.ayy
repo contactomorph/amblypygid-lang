@@ -7,26 +7,35 @@ g('text) %% copy
 g(text) %% move
 g("Hello") %% auto copy
 
+%% Projecting means the original value is conserved
+%% Copying is just projecting from a type to itself
+pact Projectable for From and To
+	fn project(from Self.From => Self.To)
+
 compl ClientId, Str: Projectable
 	fn project(from ClientId => Str)
 		#format("{:3}-{:x8}", from.prefix, from.number)
 
 id ClientId = …
 
-%% Projecting means the original value is conserved
-%% Copying is just projecting from a type to itself
 g('id) %% project
 g(Str'id) %% explicitly project
 
 %% Transforming means the original value is consumed
+pact Transform for From and To
+	fn transform(acq from Self.From => Self.To)
+
 g(id as Str) %% transform
+
+%% Reinterpreting means the original value is borrowed
+%% as long as the new value lives.
+pact Reinterpretable for From and To[$!l]
+	fn reinterprete(vers from Self.From => Self.To[from])
 
 compl Client, ClientWrapper[]: Reinterpretable
 	fn reinterprete(vers from Client => ClientWrapper[from])
 		…
 
-%% Reinterpreting means the original value is borrowed
-%% as long as the new value lives.
 h(client as ClientWrapper[client]) %% reinterprete
 
 %% Access mode reinterpretation:

@@ -13,11 +13,14 @@ Opt[Int].Some
 %% value
 Opt[Int]!none
 
-%% option type
+%% Option type:
 Opt T
+%% Equivalent to:
 T?
-%% result type
+
+%% Result type:
 Res[O, E]
+%% Equivalent to:
 O / E
 
 %% union with common fields
@@ -35,9 +38,9 @@ case !east, !west, !north, !south
 
 type Cardinal case !east, !west, !north, !south
 
-%% Free unions
-%% advantage: preexisting types
-%% weakness: non mutable 
+%% Idea: anonymous unions
+%% Advantage: preexisting types
+%% Weakness: non mutable 
 tuple $(integer Int or string Text or float Float32)
 
 %% Contrast with tuple:
